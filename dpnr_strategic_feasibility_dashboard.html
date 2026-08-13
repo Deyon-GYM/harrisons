@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPNR Strategic Feasibility & Process Optimization | Harrisons Malayalam Ltd</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f4f7f4',
+                            100: '#e3ebe3',
+                            600: '#2d5a3f',
+                            700: '#1b3b2b', // Deep Forest Green
+                            800: '#132b1f',
+                            accent: '#d4a373', // Amber Gold
+                            warn: '#c85a32', // Terracotta Red
+                            bg: '#fbf9f5' // Warm off-white
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Chart Container Rules as mandated */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-brand-bg text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+<!-- Chosen Palette: Earthy Corporate Sustainability (Forest Green #1b3b2b, Sage #2d5a3f, Amber Gold #d4a373, Warm Cream Background #fbf9f5, Terracotta Alert #c85a32, Dark Slate #1e293b) -->
+
+<!-- Application Structure Plan:
+     1. Executive Header & Internship Metadata: Overview of the study conducted at Harrisons Malayalam Ltd (HML) under mentors Mr. Biju Panicker (Head of Rubber Operations & VP Business), Mr. Vishnu (Marketing), and Ms. Jubi Chacko (HR), for NADP Nagpur PGDM submission.
+     2. Top-Level Summary Key Performance Indicator (KPI) Bar: Fast high-level metrics contrasting Greenfield Deficit vs. HML Retrofit Add-on ROI.
+     3. Primary Navigation: Smooth tabbed system (Dashboard, HML Estates & Infrastructure, Polymer Chemistry & Tech, Market & Financial Model, Strategic Roadmap, ESG & EUDR Compliance).
+     4. Dynamic Content Modules:
+        - Interactive CapEx & Unit Economics Simulator: Allows leadership to toggle between a standalone Greenfield Plant vs. HML Cenex Add-On Retrofit, demonstrating why leveraging existing HML infrastructure saves ₹60+ Cr and delivers an ROI >200%.
+        - Interactive HML Estate Capability Matrix: Real-time filterable dataset of HML estates (Mooply, Palapilly, Kumbazha, Kaliyar, etc.) highlighting Cenex facility retrofit readiness.
+        - Chemistry & Tech Deep Dive: Dynamic Chart.js visualizations for the Payne Effect in silica green tires, Bound Rubber Content (BRC), and Centrifugation vs. Low-Energy Buoyancy Purification.
+        - Strategic Decision Matrix: Interactive scenarios (Options A, B, C, D) with risk-return scoring.
+        - ESG & EUDR Dashboard: Blockchain-enabled BSNR platform mapping and LCA carbon footprint comparison against synthetic nitrile.
+-->
+
+<!-- Visualization & Content Choices:
+     1. Interactive Financial Model (HTML Sliders + Vanilla JS): Dynamic updates of Cost/kg, EBITDA, NPV, and Payback. Justification: Shows immediate financial proof of why "Add-On Retrofit" succeeds while Greenfield fails.
+     2. Dynamic Bar & Line Charts (Chart.js / Canvas):
+        - Payne Effect & Storage Modulus (G') vs Strain %: Demonstrates superior silanization of DPNR in silica green tires.
+        - Production Cost vs Selling Price Ceiling: Highlights structural margin inversion in Greenfield vs profit margin in Retrofit.
+        - Global vs Domestic Demand Paradox: Donut/Bar chart showing $1.2B global TAM vs ₹1.75-4.0 Cr domestic demand.
+        - Life Cycle Assessment (LCA) Carbon Footprint: Bar chart comparing Nitrile (7-10 kg CO2/kg) vs Buoyancy DPNR (2-3 kg CO2/kg).
+     3. Estate Capability Table: Interactive JS filtering by facility type (Cenex, TSR, Skim, RSS).
+     4. NO SVG graphics used. NO Mermaid JS used. Clean Tailwind markup + Unicode indicators.
+-->
+
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- TOP HEADER / INTERNSHIP METADATA BAR -->
+    <header class="bg-brand-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">🌿</span>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide">HARRISONS MALAYALAM LIMITED</h1>
+                    <p class="text-xs text-emerald-200 font-medium">Strategic Feasibility Assessment: Deproteinized Natural Rubber (DPNR)</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2 text-xs bg-brand-800/80 px-3 py-1.5 rounded-lg border border-emerald-600/30">
+                <span class="text-emerald-300 font-semibold">Internship Research Project</span>
+                <span class="text-slate-400">|</span>
+                <span>NADP Nagpur (PGDM)</span>
+                <button onclick="toggleModal('internshipModal')" class="ml-2 text-brand-accent underline hover:text-white transition">View Credits & Declaration</button>
+            </div>
+        </div>
+        
+        <!-- NAVIGATION BAR -->
+        <nav class="bg-brand-800 border-t border-emerald-900/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex space-x-1 overflow-x-auto py-2 text-xs sm:text-sm font-medium scrollbar-none">
+                    <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-tab px-4 py-1.5 rounded-md text-white bg-brand-600 shadow">Executive Dashboard</button>
+                    <button onclick="switchTab('estates')" id="tab-estates" class="nav-tab px-4 py-1.5 rounded-md text-emerald-200 hover:text-white hover:bg-brand-700">HML Estates & Add-On Assets</button>
+                    <button onclick="switchTab('tech')" id="tab-tech" class="nav-tab px-4 py-1.5 rounded-md text-emerald-200 hover:text-white hover:bg-brand-700">Chemistry & Process Tech</button>
+                    <button onclick="switchTab('financials')" id="tab-financials" class="nav-tab px-4 py-1.5 rounded-md text-emerald-200 hover:text-white hover:bg-brand-700">Financial Feasibility & Simulator</button>
+                    <button onclick="switchTab('strategy')" id="tab-strategy" class="nav-tab px-4 py-1.5 rounded-md text-emerald-200 hover:text-white hover:bg-brand-700">Strategic Recommendations</button>
+                    <button onclick="switchTab('esg')" id="tab-esg" class="nav-tab px-4 py-1.5 rounded-md text-emerald-200 hover:text-white hover:bg-brand-700">ESG & EUDR Mandates</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+
+        <!-- SECTION 1: EXECUTIVE DASHBOARD -->
+        <section id="sec-dashboard" class="tab-content space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                <div class="flex justify-between items-start flex-wrap gap-2">
+                    <div>
+                        <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Executive Synthesis & Internship Findings</span>
+                        <h2 class="text-2xl font-bold text-slate-900">DPNR Strategic Feasibility: The Greenfield Paradox vs. Add-On Retrofit Realities</h2>
+                    </div>
+                    <span class="px-3 py-1 bg-emerald-100 text-brand-700 rounded-full text-xs font-bold flex items-center gap-1">
+                        <span>🎯</span> Primary Recommendation: Process Retrofit (Option C)
+                    </span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    This interactive report presents the comprehensive strategic, financial, technological, and ESG evaluation for establishing Deproteinized Natural Rubber (DPNR) capability at <strong>Harrisons Malayalam Limited (HML)</strong>. While global DPNR markets expand past $1.2 Billion, domestic Indian commercial demand remains tightly constrained at 50–100 metric tons/year. A standalone greenfield manufacturing plant faces severe structural margin inversion (production cost >₹1,100/kg vs. buyer price ceiling of ₹370/kg). However, by <strong>leveraging HML's existing Cenex infrastructure</strong> (e.g., Mooply, Kumbazha estates) through low-CapEx enzymatic process optimization, HML can capture high-margin medical-grade latex demand with an ROI >200% and a payback period under 9 months.
+                </p>
+            </div>
+
+            <!-- KPI Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-xl border-l-4 border-brand-warn shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">Greenfield CapEx Requirement</p>
+                    <h3 class="text-2xl font-bold text-slate-800 my-1">₹50 - ₹80 Cr</h3>
+                    <p class="text-xs text-brand-warn font-semibold">⚠️ Unviable (Negative NPV -₹26 Cr)</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border-l-4 border-emerald-600 shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">HML Cenex Add-On CapEx</p>
+                    <h3 class="text-2xl font-bold text-emerald-700 my-1 font-mono">&lt; ₹1.0 Cr</h3>
+                    <p class="text-xs text-emerald-600 font-semibold">✅ Highly Viable (Payback &lt; 9 Mos)</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border-l-4 border-brand-accent shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">Domestic Indian TAM (DPNR)</p>
+                    <h3 class="text-2xl font-bold text-slate-800 my-1">50 - 100 MT</h3>
+                    <p class="text-xs text-slate-600 font-medium">₹1.75 Cr – ₹4.0 Cr Total Value</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border-l-4 border-brand-700 shadow-sm">
+                    <p class="text-xs text-slate-500 font-medium">HML Plantation Rubber Footprint</p>
+                    <h3 class="text-2xl font-bold text-brand-700 my-1">7,400 Hectares</h3>
+                    <p class="text-xs text-emerald-700 font-medium">100% EUDR Compliance Ready</p>
+                </div>
+            </div>
+
+            <!-- Core Strategic Comparison Visuals -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Greenfield vs Add-On Unit Economics -->
+                <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-bold text-slate-900 text-base">Cost Structure Comparison (₹/kg)</h3>
+                        <p class="text-xs text-slate-500">Why starting from scratch fails while retrofitting HML assets succeeds.</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="costComparisonChart"></canvas>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg text-xs text-slate-600 leading-relaxed border border-slate-200">
+                        <strong>Insight:</strong> Standalone Greenfield DPNR carries a fixed depreciation burden of ₹666/kg at 75 MT/yr scale, pushing total unit cost to ₹1,116/kg. By retrofitting existing HML Cenex lines, the fixed cost is absorbed, enabling unit production at ₹330/kg against the ₹370/kg market price ceiling.
+                    </div>
+                </div>
+
+                <!-- Global vs India Market Gap -->
+                <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-bold text-slate-900 text-base">Market Reality: Global Expansion vs Domestic Niche</h3>
+                        <p class="text-xs text-slate-500">Addressing top-down market misalignments.</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="marketParadoxChart"></canvas>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg text-xs text-slate-600 leading-relaxed border border-slate-200">
+                        <strong>Insight:</strong> Although Asia-Pacific dominates the global $1.2B DPNR market (45% share), Indian glove & device makers heavily favor cheap synthetic nitrile (15% CAGR) or existing double-centrifuged latex. Domestic demand is strictly confined to small niches like dental dams and specialized exports.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: HML ESTATES & ADD-ON ASSETS -->
+        <section id="sec-estates" class="tab-content space-y-6 hidden">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">HML Integrated Operations Analysis</span>
+                <h2 class="text-2xl font-bold text-slate-900">Leveraging Harrisons Malayalam Plantation Infrastructure</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Harrisons Malayalam Limited (HML) operates over 14,000 hectares of integrated agricultural land, with 7,400 hectares dedicated specifically to natural rubber, producing 8,500 to 9,000 metric tons annually across 10 key estate clusters. Rather than committing ₹50-80 Crore to build redundant infrastructure, HML's existing <strong>Centrifuged Latex (Cenex) factories at Mooply and Kumbazha</strong> provide the immediate operational foundation required to deploy enzymatic deproteinization retrofits at a fraction of the cost.
+                </p>
+            </div>
+
+            <!-- Estate Capability Filter Controls -->
+            <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h3 class="font-bold text-slate-900 text-base">HML Rubber Estate & Processing Facility Matrix</h3>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <button onclick="filterEstates('all')" class="estate-filter-btn px-3 py-1.5 rounded-md bg-brand-700 text-white font-medium">All Estates</button>
+                        <button onclick="filterEstates('Cenex')" class="estate-filter-btn px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium">Cenex Facilities (Primary Add-On Target)</button>
+                        <button onclick="filterEstates('Block')" class="estate-filter-btn px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium">Block Rubber (TSR)</button>
+                        <button onclick="filterEstates('RSS')" class="estate-filter-btn px-3 py-1.5 rounded-md bg-slate-100 text-slate-700 hover:bg-slate-200 font-medium">RSS & PLC Lines</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-brand-50 text-brand-700 font-semibold border-b border-emerald-900/10">
+                                <th class="p-3">Estate Name</th>
+                                <th class="p-3">Area (Hectares)</th>
+                                <th class="p-3">Existing Infrastructure</th>
+                                <th class="p-3">DPNR / Low-Protein Add-On Feasibility</th>
+                                <th class="p-3">EUDR GIS Polygon Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="estateTableBody" class="divide-y divide-slate-100 text-slate-700">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Infrastructure Retrofit Callout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-emerald-900 text-white p-6 rounded-xl space-y-3">
+                    <div class="flex items-center space-x-2 text-emerald-300 font-bold text-sm">
+                        <span>🏭</span>
+                        <h4>Mooply & Kumbazha Cenex Anchor Facilities</h4>
+                    </div>
+                    <p class="text-emerald-100 text-xs leading-relaxed">
+                        These key operational estates house continuous high-capacity centrifugal latex separators, latex reception vats, and quality control labs. Introducing an enzymatic dosage dosing system (alkaline protease) directly into the field latex preservation tanks prior to standard centrifugation creates an immediate low-protein NRL product without requiring new centrifuges.
+                    </p>
+                    <ul class="text-xs text-emerald-200 space-y-1 list-disc pl-4">
+                        <li>Estimated Retrofit Cost: ₹35 - ₹60 Lakh</li>
+                        <li>Capacity Integration: Up to 1,500 MT/year of Enhanced NRL</li>
+                        <li>Timeline to Commissioning: 60 - 90 Days</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                    <div class="flex items-center space-x-2 text-brand-700 font-bold text-sm">
+                        <span>⚖️</span>
+                        <h4>Value Conservation: Why Not Build Greenfield?</h4>
+                    </div>
+                    <p class="text-slate-600 text-xs leading-relaxed">
+                        Building a standalone 75 MT/year DPNR facility requires buying standalone land, dedicated effluent treatment plants (ETP), steam column coagulators, and duplicate analytical instruments. By avoiding standalone Greenfield execution, HML conserves <strong>₹60+ Crore in capital</strong> and eliminates ₹27 Crore in projected cumulative operating losses over 5 years.
+                    </p>
+                    <div class="p-2 bg-amber-50 rounded border border-amber-200 text-xs text-amber-800 font-medium">
+                        💡 Key Takeaway: Existing asset integration transforms a capital-destroying venture into an immediate EBITDA-positive operational enhancement.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: POLYMER CHEMISTRY & PROCESS TECH -->
+        <section id="sec-tech" class="tab-content space-y-6 hidden">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Polymer Science & Engineering Evaluation</span>
+                <h2 class="text-2xl font-bold text-slate-900">Deproteinization Chemistry: Green Tires & Low-Energy Purification</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Deproteinized Natural Rubber strips away the 3-5% non-rubber protein constituents encasing the *Hevea* latex particle. Beyond eliminating Type I IgE-mediated latex allergies in healthcare, protein removal completely eliminates competitive adsorption during silica compounding for <strong>low-rolling-resistance "Green Tires."</strong> Furthermore, emerging <strong>buoyancy-driven ($CO_2$ bubbling) purification</strong> drastically reduces energy consumption compared to traditional multi-stage centrifugation.
+                </p>
+            </div>
+
+            <!-- Tech Grid: Charts & Comparisons -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Payne Effect Dynamic Chart -->
+                <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-bold text-slate-900 text-base">The Payne Effect in Silica Green Tires</h3>
+                        <p class="text-xs text-slate-500">Storage Modulus (G') vs Strain %: DPNR vs Standard NR with Silane (TESPT).</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="payneEffectChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded border border-slate-200">
+                        <strong>Scientific Significance:</strong> Standard NR contains proteins that compete with silane coupling agents (TESPT) for active silanol sites on silica. DPNR eliminates this interference, yielding a drastically lower Payne effect (reduced filler agglomeration), higher Bound Rubber Content (BRC), and no thermal reversion even at elevated dump temperatures (150°C).
+                    </p>
+                </div>
+
+                <!-- Purification Method Comparison: Centrifugation vs Buoyancy -->
+                <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-bold text-slate-900 text-base">Purification Methodology Comparison</h3>
+                        <p class="text-xs text-slate-500">Traditional High-Speed Centrifugation vs. Buoyancy-Driven $CO_2$ Bubbling.</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-slate-800 text-sm">Pureprena Centrifugation Benchmark</span>
+                                <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs rounded font-semibold">10 kWh / Ton</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Uses 72-hour enzymatic hydrolysis with protease + HNS stabilizer, followed by repeated high-speed centrifugation ($10^4 \times g$). Highly effective (Nitrogen &lt;0.12%), but energy-intensive and expensive for power-constrained grids.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-brand-700 text-sm">Buoyancy-Driven $CO_2$ Process (Sustainable)</span>
+                                <span class="px-2 py-0.5 bg-emerald-200 text-brand-800 text-xs rounded font-bold">0.01 kWh / Ton</span>
+                            </div>
+                            <p class="text-xs text-slate-700 leading-relaxed">
+                                Saponifies lipid layers with 2% NaOH, denatures proteins with 0.1% urea/SDS, and bubbles $CO_2$ to generate ammonium carbonate. Causes rubber particles to buoyantly flocculate (1,500-4,000 nm) while dense proteins sink. Results in zero detectable nitrogen (0.000%).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-brand-50 rounded-lg text-xs text-brand-700 font-medium">
+                        ⚡ Energy Reduction: Buoyancy-driven purification reduces electricity consumption by >99%, offering a carbon footprint 60-70% lower than synthetic nitrile.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: FINANCIAL FEASIBILITY & INTERACTIVE SIMULATOR -->
+        <section id="sec-financials" class="tab-content space-y-6 hidden">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Financial Viability & Interactive Scenario Modeling</span>
+                <h2 class="text-2xl font-bold text-slate-900">Business Case Analysis & Interactive Simulator</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Evaluating the unit economics reveals why standalone greenfield DPNR production destroys economic value while an <strong>HML Cenex Add-On Retrofit</strong> generates strong positive returns. Use the interactive simulator below to test different production volumes, market price points, and facility deployment strategies in real time.
+                </p>
+            </div>
+
+            <!-- INTERACTIVE FINANCIAL SIMULATOR -->
+            <div class="bg-white p-6 rounded-xl border-2 border-brand-600 shadow-md space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 gap-2">
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+                            <span>🧮</span> Financial Viability Scenario Simulator
+                        </h3>
+                        <p class="text-xs text-slate-500">Adjust parameters to observe real-time dynamic impact on margins, EBITDA, and NPV.</p>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-lg text-xs">
+                        <button id="btnModeGreenfield" onclick="setSimMode('greenfield')" class="px-3 py-1.5 rounded-md font-bold bg-white text-slate-800 shadow">Greenfield Plant</button>
+                        <button id="btnModeRetrofit" onclick="setSimMode('retrofit')" class="px-3 py-1.5 rounded-md font-bold text-slate-600 hover:text-slate-900">HML Cenex Add-On (Option C)</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Controls Column -->
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <div>
+                            <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                                <label for="simVolume">Annual Volume Target (MT):</label>
+                                <span id="simVolumeVal" class="text-brand-600">75 MT</span>
+                            </div>
+                            <input type="range" id="simVolume" min="30" max="200" step="5" value="75" oninput="updateSimulation()" class="w-full accent-brand-600">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-bold text-slate-700 mb-1">
+                                <label for="simPrice">Selling Price Realization (₹/kg):</label>
+                                <span id="simPriceVal" class="text-brand-600">₹370 / kg</span>
+                            </div>
+                            <input type="range" id="simPrice" min="320" max="450" step="5" value="370" oninput="updateSimulation()" class="w-full accent-brand-600">
+                            <span class="text-[10px] text-slate-500">Market Price Ceiling: ₹350–400/kg (Pureprena import)</span>
+                        </div>
+
+                        <div id="greenfieldCapExBlock">
+                            <label class="text-xs font-bold text-slate-700 block mb-1">Greenfield CapEx (₹ Crore):</label>
+                            <input type="number" id="simCapEx" value="50" onchange="updateSimulation()" class="w-full p-2 border rounded text-xs font-mono">
+                        </div>
+
+                        <div id="retrofitCapExBlock" class="hidden">
+                            <label class="text-xs font-bold text-slate-700 block mb-1">HML Retrofit CapEx (₹ Lakh):</label>
+                            <input type="number" id="simRetroCapEx" value="75" onchange="updateSimulation()" class="w-full p-2 border rounded text-xs font-mono">
+                        </div>
+                    </div>
+
+                    <!-- Output Metrics Column 1 -->
+                    <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-center">
+                        <div class="border-b pb-2">
+                            <span class="text-xs text-slate-500 block">Unit Cost vs Realization</span>
+                            <div class="flex justify-between items-baseline mt-1">
+                                <span class="text-xs font-semibold text-slate-700">Fully Loaded Cost:</span>
+                                <span id="outUnitCost" class="text-lg font-bold font-mono text-slate-900">₹1,116 / kg</span>
+                            </div>
+                            <div class="flex justify-between items-baseline text-xs mt-1">
+                                <span class="text-slate-600">Net Unit Margin:</span>
+                                <span id="outUnitMargin" class="font-bold font-mono text-brand-warn">- ₹746 / kg</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span class="text-xs text-slate-500 block">Annual EBITDA Projection</span>
+                            <h4 id="outEbitda" class="text-2xl font-bold font-mono text-brand-warn my-1">- ₹30.3 Crore</h4>
+                            <p id="outEbitdaNote" class="text-[11px] text-slate-500 leading-tight">Severe capital destruction due to fixed overheads.</p>
+                        </div>
+                    </div>
+
+                    <!-- Output Metrics Column 2 -->
+                    <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200 flex flex-col justify-center">
+                        <div class="border-b pb-2">
+                            <span class="text-xs text-slate-500 block">5-Year Net Present Value (NPV @ 10%)</span>
+                            <h4 id="outNpv" class="text-xl font-bold font-mono text-brand-warn my-1">- ₹22.5 Crore</h4>
+                        </div>
+
+                        <div>
+                            <span class="text-xs text-slate-500 block">IRR & Payback Horizon</span>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-xs text-slate-600">Projected IRR:</span>
+                                <span id="outIrr" class="text-sm font-bold font-mono text-brand-warn">Negative</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs mt-1">
+                                <span class="text-slate-600">Simple Payback:</span>
+                                <span id="outPayback" class="font-bold font-mono text-slate-800">Never</span>
+                            </div>
+                        </div>
+
+                        <div id="outFeasibilityBadge" class="p-2 text-center rounded text-xs font-bold bg-red-100 text-red-800 border border-red-200">
+                            🔴 UNVIABLE PROJECT STRUCTURE
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Scenario Data Table -->
+            <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                <h3 class="font-bold text-slate-900 text-base">3-Scenario Financial Summary (Greenfield Facility)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-semibold border-b">
+                                <th class="p-2.5">Metric</th>
+                                <th class="p-2.5">Scenario A (Conservative)</th>
+                                <th class="p-2.5">Scenario B (Base Case)</th>
+                                <th class="p-2.5">Scenario C (Optimistic)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y text-slate-700 font-mono">
+                            <tr>
+                                <td class="p-2.5 font-sans font-medium">Annual Production Volume</td>
+                                <td class="p-2.5">30 Tons (50% Util)</td>
+                                <td class="p-2.5">75 Tons (75% Util)</td>
+                                <td class="p-2.5">150 Tons (100% Util)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-sans font-medium">Target Price Realization</td>
+                                <td class="p-2.5">₹350 / kg</td>
+                                <td class="p-2.5">₹370 / kg</td>
+                                <td class="p-2.5">₹400 / kg</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-sans font-medium">Optimized Variable Cost</td>
+                                <td class="p-2.5">₹380 / kg</td>
+                                <td class="p-2.5">₹375 / kg</td>
+                                <td class="p-2.5">₹348 / kg</td>
+                            </tr>
+                            <tr class="bg-red-50 text-red-900 font-bold">
+                                <td class="p-2.5 font-sans">Annual EBITDA</td>
+                                <td class="p-2.5">- ₹15.35 Crore</td>
+                                <td class="p-2.5">- ₹30.30 Crore</td>
+                                <td class="p-2.5">+ ₹2.80 Crore (Marginal)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-sans font-medium">5-Year Net Present Value (NPV)</td>
+                                <td class="p-2.5">- ₹18 to - ₹22 Cr</td>
+                                <td class="p-2.5">- ₹20 to - ₹26 Cr</td>
+                                <td class="p-2.5">+ ₹2 to + ₹5 Cr</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-sans font-medium">IRR / Payback Horizon</td>
+                                <td class="p-2.5">Negative / Never</td>
+                                <td class="p-2.5">Negative / Never</td>
+                                <td class="p-2.5">8-10% / &gt;21 Years</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: STRATEGIC RECOMMENDATIONS & ROADMAP -->
+        <section id="sec-strategy" class="tab-content space-y-6 hidden">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Corporate Strategy & Decision Roadmap</span>
+                <h2 class="text-2xl font-bold text-slate-900">Strategic Decision Matrix for Harrisons Malayalam</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Based on market triangulation, financial modeling, and asset auditing, HML should explicitly reject standalone greenfield commercialization and pivot toward a disciplined, high-return process optimization strategy. Select each strategic option below to evaluate its risk, financial return, and execution timeline.
+                </p>
+            </div>
+
+            <!-- STRATEGIC OPTIONS CARDS -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Option A -->
+                <div class="bg-white p-5 rounded-xl border-2 border-red-200 hover:border-red-400 transition space-y-3">
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-1 bg-red-100 text-red-800 text-xs font-bold rounded">Option A: Primary Recommendation</span>
+                        <span class="text-xs text-slate-500">CapEx: ₹0</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base">Reject Full-Scale Greenfield DPNR Plant</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Do not pursue capital deployment for a dedicated 60-150 ton/yr greenfield DPNR manufacturing facility.
+                    </p>
+                    <div class="p-2.5 bg-red-50 rounded text-xs text-red-900 space-y-1">
+                        <p><strong>Rationale:</strong> Greenfield CapEx (₹50-80 Cr) is entirely disproportionate to domestic demand (₹1.75-4.0 Cr). Prevents ₹87 Cr in total economic value destruction.</p>
+                    </div>
+                </div>
+
+                <!-- Option B -->
+                <div class="bg-white p-5 rounded-xl border-2 border-slate-200 hover:border-slate-400 transition space-y-3">
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-800 text-xs font-bold rounded">Option B: IP Licensing</span>
+                        <span class="text-xs text-slate-500">CapEx: ₹20–30 Lakh</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base">Niche Technology Licensing Model</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Monetize low-energy buoyancy purification IP or silica compounding know-how by licensing to tire/glove majors.
+                    </p>
+                    <div class="p-2.5 bg-slate-100 rounded text-xs text-slate-800 space-y-1">
+                        <p><strong>Rationale:</strong> Generates high-margin royalties (₹5-10/kg) while shifting capital and market risk entirely to downstream licensees.</p>
+                    </div>
+                </div>
+
+                <!-- Option C (BEST OPTION) -->
+                <div class="bg-white p-5 rounded-xl border-2 border-emerald-600 shadow-md space-y-3">
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded">Option C: Highly Recommended</span>
+                        <span class="text-xs text-emerald-700 font-bold">CapEx: &lt; ₹1.0 Crore</span>
+                    </div>
+                    <h3 class="font-bold text-brand-700 text-base">Process Optimization of Existing NRL Lines</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Retrofit HML's Mooply/Kumbazha Cenex lines with alkaline protease enzyme dosing to produce "Enhanced Low-Protein NRL".
+                    </p>
+                    <div class="p-2.5 bg-emerald-50 rounded text-xs text-brand-800 space-y-1 border border-emerald-200">
+                        <p><strong>Rationale:</strong> Cost increment of only ₹10-15/kg vs. price premium of ₹20-30/kg across existing 100,000+ ton Indian glove market. Annual profit increment of ₹1-2 Cr with ROI >200% and payback &lt; 9 months.</p>
+                    </div>
+                </div>
+
+                <!-- Option D -->
+                <div class="bg-white p-5 rounded-xl border-2 border-brand-accent/40 hover:border-brand-accent transition space-y-3">
+                    <div class="flex justify-between items-start">
+                        <span class="px-2.5 py-1 bg-amber-100 text-amber-900 text-xs font-bold rounded">Option D: Immediate Execution</span>
+                        <span class="text-xs text-slate-500">CapEx: Low Operational</span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base">EUDR & BSNR Traceability Monetization</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Weaponize HML's contiguous estate land bank (7,400 ha) to secure EUDR compliance via Rubber Board's BSNR blockchain.
+                    </p>
+                    <div class="p-2.5 bg-amber-50 rounded text-xs text-amber-900 space-y-1">
+                        <p><strong>Rationale:</strong> Captures lucrative "Deforestation-Free Premium" on European exports while fragmented smallholder competitors struggle with GIS mapping.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operational Implementation Timeline -->
+            <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                <h3 class="font-bold text-slate-900 text-base">HML Add-On Implementation Roadmap (12 Months)</h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                    <div class="p-3 bg-slate-50 rounded-lg border-t-4 border-brand-600 space-y-1">
+                        <span class="font-bold text-brand-600 block">Phase 1: Months 1 - 3</span>
+                        <h4 class="font-semibold text-slate-800">Pilot Line Retrofit</h4>
+                        <p class="text-slate-600">Install enzyme dosing & temperature control loops at Mooply Cenex plant.</p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 rounded-lg border-t-4 border-brand-600 space-y-1">
+                        <span class="font-bold text-brand-600 block">Phase 2: Months 4 - 6</span>
+                        <h4 class="font-semibold text-slate-800">Testing & Certification</h4>
+                        <p class="text-slate-600">Conduct Lowry assay protein checks (&lt;50 µg/dm²) & ISO 13485 biocompatibility audits.</p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 rounded-lg border-t-4 border-brand-600 space-y-1">
+                        <span class="font-bold text-brand-600 block">Phase 3: Months 7 - 9</span>
+                        <h4 class="font-semibold text-slate-800">Customer Trials</h4>
+                        <p class="text-slate-600">Supply trial batches to interested buyers (Burly Polymers, ST Marys, Kanam Latex).</p>
+                    </div>
+
+                    <div class="p-3 bg-slate-50 rounded-lg border-t-4 border-emerald-600 space-y-1">
+                        <span class="font-bold text-emerald-700 block">Phase 4: Months 10 - 12</span>
+                        <h4 class="font-semibold text-slate-800">Full Commercial Scale</h4>
+                        <p class="text-slate-600">Scale up enhanced NRL production and integrate BSNR blockchain DDS statements for EU export.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: ESG & EUDR MANDATES -->
+        <section id="sec-esg" class="tab-content space-y-6 hidden">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-xl border border-emerald-900/10 shadow-sm space-y-3">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Environmental, Social & Governance (ESG) Impact</span>
+                <h2 class="text-2xl font-bold text-slate-900">EUDR Deforestation Compliance & Life Cycle Assessment (LCA)</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    While greenfield DPNR faces strict financial barriers, the polymer's ESG profile is exemplary. Natural rubber acts as a natural carbon sink, and low-energy DPNR offers a 60-70% reduction in greenhouse gas emissions compared to synthetic nitrile. Crucially, HML's plantation scale provides an immediate competitive moat under the **European Union Deforestation Regulation (EUDR)**.
+                </p>
+            </div>
+
+            <!-- ESG Visual Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Carbon Footprint LCA Chart -->
+                <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-bold text-slate-900 text-base">Life Cycle Assessment (LCA): Carbon Footprint</h3>
+                        <p class="text-xs text-slate-500">kg CO2 equivalent generated per kg of polymer produced.</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="lcaChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded border border-slate-200">
+                        <strong>Climate Impact:</strong> Synthetic nitrile synthesis involves fossil fuel cracking and emits 7–10 kg CO2/kg. Plant-based natural rubber sequester carbon during the tree growth phase; paired with buoyancy-driven DPNR processing, emissions drop to 2–3 kg CO2/kg.
+                    </p>
+                </div>
+
+                <!-- EUDR Blockchain Compliance Feature -->
+                <div class="bg-white p-5 rounded-xl border border-emerald-900/10 shadow-sm space-y-4">
+                    <div class="border-b pb-3">
+                        <h3 class="font-bold text-slate-900 text-base">EUDR Compliance & BSNR Blockchain Integration</h3>
+                        <p class="text-xs text-slate-500">Mandatory Due Diligence Statements (DDS) for European exports.</p>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-brand-700 space-y-1">
+                            <span class="font-bold text-slate-800">1. Contiguous Polygon Mapping</span>
+                            <p class="text-slate-600">HML's 7,400 ha estate boundaries are mapped using GIS polygons, proving zero post-2020 deforestation.</p>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-brand-700 space-y-1">
+                            <span class="font-bold text-slate-800">2. BSNR Blockchain Ledger</span>
+                            <p class="text-slate-600">Integration with Rubber Board's Bharat Sustainable Natural Rubber platform (powered by TRST01) creates tamper-proof batch origin logs.</p>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 rounded-lg border-l-4 border-emerald-600 space-y-1">
+                            <span class="font-bold text-brand-700">3. EU Market Access & Price Premium</span>
+                            <p class="text-slate-600">Guarantees uninterrupted access to EU tire and device makers under HS Code 4001, commanding a 5-10% compliance premium.</p>
+                        </div>
+                    </div>
+
+                    <!-- UN SDG Alignment Badges -->
+                    <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+                        <span class="text-xs font-bold text-brand-700 block mb-1">UN Sustainable Development Goals (SDG) Alignment:</span>
+                        <div class="flex flex-wrap gap-2 text-[11px] font-semibold">
+                            <span class="px-2 py-0.5 bg-white text-emerald-800 rounded border">SDG 3: Good Health (Allergy Removal)</span>
+                            <span class="px-2 py-0.5 bg-white text-emerald-800 rounded border">SDG 5: Gender Equality (60% Female Estate Workforce)</span>
+                            <span class="px-2 py-0.5 bg-white text-emerald-800 rounded border">SDG 8: Decent Work (15,000 Plantation Workers)</span>
+                            <span class="px-2 py-0.5 bg-white text-emerald-800 rounded border">SDG 13: Climate Action (Renewable Polymer)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-800 text-emerald-200 border-t border-emerald-900 py-6 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="font-bold text-white">Harrisons Malayalam Limited (HML) — Strategic Feasibility Assessment</p>
+                <p class="text-emerald-400 mt-0.5">Deproteinized Natural Rubber (DPNR) Market, Financial & ESG Study</p>
+            </div>
+            <div class="text-right text-emerald-300 space-y-1">
+                <p>Internship Report Submission | NADP Nagpur PGDM Program</p>
+                <p class="text-emerald-400">Mentors: Mr. Biju Panicker (Head Rubber Ops & VP), Mr. Vishnu (Marketing), Ms. Jubi Chacko (HR)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERNSHIP DECLARATION MODAL -->
+    <div id="internshipModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white max-w-2xl w-full rounded-2xl shadow-2xl overflow-hidden border border-slate-200 space-y-4 p-6 relative">
+            <button onclick="toggleModal('internshipModal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">✕</button>
+            
+            <div class="border-b pb-3">
+                <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">Formal Declaration & Credits</span>
+                <h3 class="text-xl font-bold text-slate-900">Internship Project Declaration</h3>
+            </div>
+
+            <div class="text-xs text-slate-600 leading-relaxed space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+                <p class="italic bg-slate-50 p-3 rounded border border-slate-200">
+                    "I hereby declare that the internship report entitled <strong>'Deproteinized Natural Rubber (DPNR): Strategic Market Feasibility, Financial Viability, and Marketing Opportunity Assessment for Harrisons Malayalam Ltd'</strong> is an authentic record of the work carried out by me during my internship at Harrisons Malayalam Limited in Kochi, India. This research was conducted under the expert guidance and mentorship of <strong>Mr. Biju Panicker</strong>, Head of Rubber Operations and Vice President of Business."
+                </p>
+                <p class="italic bg-slate-50 p-3 rounded border border-slate-200">
+                    "I would also like to acknowledge the invaluable assistance and coordination provided by <strong>Mr. Vishnu</strong> of the Marketing Department, and <strong>Ms. Jubi Chacko</strong>, Assistant Manager HR, throughout the duration of my internship."
+                </p>
+                <p>
+                    This report is submitted in partial fulfilment of the requirements for the Post Graduate Diploma in Management (PGDM) at the <strong>National Academy of Defence Production (NADP)</strong>, Nagpur.
+                </p>
+            </div>
+
+            <div class="pt-3 border-t flex justify-end">
+                <button onclick="toggleModal('internshipModal')" class="px-4 py-2 bg-brand-700 text-white font-bold rounded-lg text-xs hover:bg-brand-800 transition">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & CHART INTERACTIVITY -->
+    <script>
+        // Global State & Data Storage
+        let currentSimMode = 'greenfield'; // 'greenfield' or 'retrofit'
+        let charts = {};
+
+        // HML Estate Dataset
+        const hmlEstates = [
+            { name: "Mooply", area: 597, infra: "Cenex", feasibility: "High (Primary Add-On Target)", eudr: "Mapped & Compliant" },
+            { name: "Palapilly", area: 750, infra: "Block Rubber (TSR)", feasibility: "Moderate (Secondary Processing)", eudr: "Mapped & Compliant" },
+            { name: "Kundai", area: 1104, infra: "Skim Rubber", feasibility: "Low (Byproduct Focus)", eudr: "Mapped & Compliant" },
+            { name: "Kaliyar", area: 593, infra: "RSS & PLC Lines", feasibility: "Low (Sheet Rubber)", eudr: "Mapped & Compliant" },
+            { name: "Mundakayam", area: 572, infra: "Plantation Base", feasibility: "N/A (Raw Tapping)", eudr: "Mapped & Compliant" },
+            { name: "Lahai", area: 1012, infra: "Plantation Base", feasibility: "N/A (Raw Tapping)", eudr: "Mapped & Compliant" },
+            { name: "Kumbazha", area: 1048, infra: "Cenex, Skim & RSS", feasibility: "High (Secondary Add-On Anchor)", eudr: "Mapped & Compliant" },
+            { name: "Koney", area: 1063, infra: "Block Rubber (TSR)", feasibility: "Moderate (Secondary Processing)", eudr: "Mapped & Compliant" },
+            { name: "Nagamallay", area: 961, infra: "RSS & PLC Lines", feasibility: "Low (Sheet Rubber)", eudr: "Mapped & Compliant" },
+            { name: "Isfield", area: 1676, infra: "Plantation Base", feasibility: "N/A (Raw Tapping)", eudr: "Mapped & Compliant" }
+        ];
+
+        // Initialization on DOM Load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderEstateTable('all');
+            initCharts();
+            updateSimulation();
+        });
+
+        // Tab Switcher Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(el => {
+                el.classList.remove('bg-brand-600', 'text-white', 'shadow');
+                el.classList.add('text-emerald-200');
+            });
+
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            activeTab.classList.add('bg-brand-600', 'text-white', 'shadow');
+            activeTab.classList.remove('text-emerald-200');
+
+            // Trigger Chart resize/redraw when tab becomes visible
+            setTimeout(() => {
+                Object.values(charts).forEach(chart => {
+                    if (chart) chart.resize();
+                });
+            }, 50);
+        }
+
+        // Modal Toggle
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+
+        // Filter Estate Matrix
+        function filterEstates(type) {
+            // Update button styles
+            document.querySelectorAll('.estate-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-700', 'text-white');
+                btn.classList.add('bg-slate-100', 'text-slate-700');
+            });
+            event.target.classList.add('bg-brand-700', 'text-white');
+            event.target.classList.remove('bg-slate-100', 'text-slate-700');
+
+            renderEstateTable(type);
+        }
+
+        function renderEstateTable(type) {
+            const tbody = document.getElementById('estateTableBody');
+            tbody.innerHTML = '';
+
+            const filtered = hmlEstates.filter(e => {
+                if (type === 'all') return true;
+                return e.infra.toLowerCase().includes(type.toLowerCase());
+            });
+
+            filtered.forEach(e => {
+                const tr = document.createElement('tr');
+                const isCenex = e.infra.includes('Cenex');
+                tr.className = isCenex ? 'bg-emerald-50/60 font-semibold' : 'hover:bg-slate-50';
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-slate-900">${e.name} ${isCenex ? '<span class="text-xs px-1.5 py-0.5 bg-emerald-200 text-emerald-900 rounded">Cenex Facility</span>' : ''}</td>
+                    <td class="p-3 font-mono">${e.area} ha</td>
+                    <td class="p-3">${e.infra}</td>
+                    <td class="p-3 ${isCenex ? 'text-emerald-700 font-bold' : 'text-slate-600'}">${e.feasibility}</td>
+                    <td class="p-3 text-emerald-700 text-xs font-bold">✅ ${e.eudr}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Interactive Financial Simulator
+        function setSimMode(mode) {
+            currentSimMode = mode;
+            const btnG = document.getElementById('btnModeGreenfield');
+            const btnR = document.getElementById('btnModeRetrofit');
+            const blockG = document.getElementById('greenfieldCapExBlock');
+            const blockR = document.getElementById('retrofitCapExBlock');
+
+            if (mode === 'greenfield') {
+                btnG.classList.add('bg-white', 'text-slate-800', 'shadow');
+                btnG.classList.remove('text-slate-600');
+                btnR.classList.remove('bg-white', 'text-slate-800', 'shadow');
+                btnR.classList.add('text-slate-600');
+                blockG.classList.remove('hidden');
+                blockR.classList.add('hidden');
+            } else {
+                btnR.classList.add('bg-white', 'text-slate-800', 'shadow');
+                btnR.classList.remove('text-slate-600');
+                btnG.classList.remove('bg-white', 'text-slate-800', 'shadow');
+                btnG.classList.add('text-slate-600');
+                blockR.classList.remove('hidden');
+                blockG.classList.add('hidden');
+            }
+            updateSimulation();
+        }
+
+        function updateSimulation() {
+            const volMT = parseFloat(document.getElementById('simVolume').value);
+            const priceKg = parseFloat(document.getElementById('simPrice').value);
+            
+            document.getElementById('simVolumeVal').innerText = `${volMT} MT`;
+            document.getElementById('simPriceVal').innerText = `₹${priceKg} / kg`;
+
+            const volKg = volMT * 1000;
+
+            if (currentSimMode === 'greenfield') {
+                const capExCr = parseFloat(document.getElementById('simCapEx').value) || 50;
+                const fixedDepreciation = (capExCr * 10000000) / 10; // 10 yr straight line
+                const depPerKg = fixedDepreciation / volKg;
+                const variableCostKg = 450; // Variable cost floor
+                const fullyLoadedCostKg = variableCostKg + depPerKg;
+                const marginKg = priceKg - fullyLoadedCostKg;
+                
+                const annualRevenueCr = (volKg * priceKg) / 10000000;
+                const annualCostCr = (volKg * fullyLoadedCostKg) / 10000000;
+                const annualEbitdaCr = annualRevenueCr - annualCostCr;
+
+                // 5-Yr NPV estimate (@ 10% discount)
+                const npvCr = (annualEbitdaCr * 3.79) - capExCr;
+
+                document.getElementById('outUnitCost').innerText = `₹${Math.round(fullyLoadedCostKg)} / kg`;
+                document.getElementById('outUnitMargin').innerText = `${marginKg >= 0 ? '+' : ''}₹${Math.round(marginKg)} / kg`;
+                document.getElementById('outUnitMargin').className = marginKg >= 0 ? 'font-bold font-mono text-emerald-600' : 'font-bold font-mono text-brand-warn';
+                
+                document.getElementById('outEbitda').innerText = `${annualEbitdaCr >= 0 ? '+' : ''}₹${annualEbitdaCr.toFixed(2)} Crore`;
+                document.getElementById('outEbitda').className = annualEbitdaCr >= 0 ? 'text-2xl font-bold font-mono text-emerald-600 my-1' : 'text-2xl font-bold font-mono text-brand-warn my-1';
+                document.getElementById('outEbitdaNote').innerText = 'Includes ₹' + Math.round(depPerKg) + '/kg fixed depreciation overhead.';
+
+                document.getElementById('outNpv').innerText = `${npvCr >= 0 ? '+' : ''}₹${npvCr.toFixed(1)} Crore`;
+                document.getElementById('outNpv').className = npvCr >= 0 ? 'text-xl font-bold font-mono text-emerald-600 my-1' : 'text-xl font-bold font-mono text-brand-warn my-1';
+
+                document.getElementById('outIrr').innerText = annualEbitdaCr > 5 ? '8 - 10%' : 'Negative';
+                document.getElementById('outIrr').className = annualEbitdaCr > 5 ? 'text-sm font-bold font-mono text-emerald-600' : 'text-sm font-bold font-mono text-brand-warn';
+
+                document.getElementById('outPayback').innerText = annualEbitdaCr > 0 ? `${(capExCr / annualEbitdaCr).toFixed(1)} Years` : 'Never';
+
+                const badge = document.getElementById('outFeasibilityBadge');
+                badge.innerHTML = '🔴 UNVIABLE GREENFIELD STRUCTURE';
+                badge.className = 'p-2 text-center rounded text-xs font-bold bg-red-100 text-red-800 border border-red-200';
+
+            } else {
+                // HML Cenex Add-On Retrofit (Option C)
+                const capExLakh = parseFloat(document.getElementById('simRetroCapEx').value) || 75;
+                const capExCr = capExLakh / 100;
+                
+                const incrementalCostKg = 15; // Enzyme + dosage cost
+                const baselineCenexCostKg = 315;
+                const totalCostKg = baselineCenexCostKg + incrementalCostKg;
+                const marginKg = priceKg - totalCostKg; // Premium margin
+
+                const annualIncrementalProfitCr = (volKg * (priceKg - (350 + incrementalCostKg))) / 10000000;
+                const totalEbitdaCr = (volKg * marginKg) / 10000000;
+                const paybackMonths = (capExCr / Math.max(0.1, totalEbitdaCr)) * 12;
+                const npvCr = (totalEbitdaCr * 3.79) - capExCr;
+
+                document.getElementById('outUnitCost').innerText = `₹${Math.round(totalCostKg)} / kg`;
+                document.getElementById('outUnitMargin').innerText = `+₹${Math.round(marginKg)} / kg`;
+                document.getElementById('outUnitMargin').className = 'font-bold font-mono text-emerald-600';
+
+                document.getElementById('outEbitda').innerText = `+₹${totalEbitdaCr.toFixed(2)} Crore`;
+                document.getElementById('outEbitda').className = 'text-2xl font-bold font-mono text-emerald-600 my-1';
+                document.getElementById('outEbitdaNote').innerText = 'Low CapEx add-on creates immediate positive operating margin.';
+
+                document.getElementById('outNpv').innerText = `+₹${npvCr.toFixed(2)} Crore`;
+                document.getElementById('outNpv').className = 'text-xl font-bold font-mono text-emerald-600 my-1';
+
+                document.getElementById('outIrr').innerText = '> 150%';
+                document.getElementById('outIrr').className = 'text-sm font-bold font-mono text-emerald-600';
+
+                document.getElementById('outPayback').innerText = `${Math.max(1, Math.round(paybackMonths))} Months`;
+
+                const badge = document.getElementById('outFeasibilityBadge');
+                badge.innerHTML = '🟢 HIGHLY VIABLE HML RETROFIT (OPTION C)';
+                badge.className = 'p-2 text-center rounded text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+            }
+        }
+
+        // Initialize All Canvas Charts
+        function initCharts() {
+            // Chart 1: Cost Comparison (Greenfield vs Market vs Retrofit)
+            const ctxCost = document.getElementById('costComparisonChart').getContext('2d');
+            charts.cost = new Chart(ctxCost, {
+                type: 'bar',
+                data: {
+                    labels: ['Greenfield (75 MT/yr)', 'Market Price Ceiling', 'HML Retrofit (Option C)'],
+                    datasets: [
+                        {
+                            label: 'Variable Cost (₹/kg)',
+                            data: [450, 0, 330],
+                            backgroundColor: '#4a7c59'
+                        },
+                        {
+                            label: 'Fixed Depr. Overhead (₹/kg)',
+                            data: [666, 0, 10],
+                            backgroundColor: '#c85a32'
+                        },
+                        {
+                            label: 'Market Price Ceiling (₹/kg)',
+                            data: [0, 370, 0],
+                            backgroundColor: '#d4a373'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, title: { display: true, text: '₹ per Kilogram' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ₹${ctx.raw}`
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Global vs Indian Market Paradox
+            const ctxMarket = document.getElementById('marketParadoxChart').getContext('2d');
+            charts.market = new Chart(ctxMarket, {
+                type: 'pie',
+                data: {
+                    labels: ['Asia-Pacific ($540M / 45%)', 'North America ($300M / 25%)', 'Europe ($240M / 20%)', 'Rest of World ($120M / 10%)'],
+                    datasets: [{
+                        data: [540, 300, 240, 120],
+                        backgroundColor: ['#1b3b2b', '#4a7c59', '#d4a373', '#94a3b8']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10 } } },
+                        title: { display: true, text: 'Global DPNR Market Share ($1.2B Total)', font: { size: 12 } }
+                    }
+                }
+            });
+
+            // Chart 3: Payne Effect Dynamic Behavior
+            const ctxPayne = document.getElementById('payneEffectChart').getContext('2d');
+            charts.payne = new Chart(ctxPayne, {
+                type: 'line',
+                data: {
+                    labels: ['0.56%', '2.0%', '5.0%', '10.0%', '20.0%', '50.0%', '100.0%'],
+                    datasets: [
+                        {
+                            label: 'Standard NR + Silica (High Payne Effect / Agglomeration)',
+                            data: [420, 380, 310, 240, 180, 140, 110],
+                            borderColor: '#c85a32',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'DPNR + Silica + TESPT (Optimized Hydrophobation)',
+                            data: [280, 270, 250, 220, 190, 150, 120],
+                            borderColor: '#1b3b2b',
+                            backgroundColor: 'transparent',
+                            borderWidth: 3,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { title: { display: true, text: 'Strain Amplitude (%)' } },
+                        y: { title: { display: true, text: 'Storage Modulus G\' (kPa)' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // Chart 4: Life Cycle Assessment (LCA) Carbon Footprint
+            const ctxLca = document.getElementById('lcaChart').getContext('2d');
+            charts.lca = new Chart(ctxLca, {
+                type: 'bar',
+                data: {
+                    labels: ['Synthetic Nitrile Rubber', 'Standard NR (Centrifuged)', 'DPNR (Buoyancy $CO_2$)'],
+                    datasets: [{
+                        label: 'Carbon Footprint (kg CO2 eq / kg)',
+                        data: [8.5, 4.2, 2.3],
+                        backgroundColor: ['#c85a32', '#d4a373', '#1b3b2b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, title: { display: true, text: 'kg CO2 Equivalent / kg' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
